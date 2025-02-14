@@ -9,7 +9,7 @@ SUMMARY_FILE="${LOG_DIR}/summary.txt"
 mkdir -p ${LOG_DIR}
 
 # Inicializar archivo de resumen
-echo -e "Lenguaje\tTiempo (ms)" > ${SUMMARY_FILE}
+echo -e "Lenguaje\tTiempo (ms)" > ${SUMMARY_FILE}  # Cambiado a ms
 echo "---------------------------------" >> ${SUMMARY_FILE}
 
 # Clonar el repositorio objetivo
@@ -27,8 +27,8 @@ for LANG_DIR in *; do
         # Construir la imagen
         docker build -t "runtime-${LANG}" -f "${LANG_DIR}/Dockerfile" "${LANG_DIR}"
         
-        # Medir tiempo de ejecución en nanosegundos y convertir a milisegundos
-        START_TIME=$(date +%s%N)
+        # Medir tiempo de ejecución (en milisegundos)
+        START_TIME=$(date +%s%N)  # Modificado a %s%N
         
         # Ejecutar el contenedor y guardar logs
         docker run --rm \
@@ -36,12 +36,9 @@ for LANG_DIR in *; do
             "runtime-${LANG}" \
             > "${LOG_DIR}/${LANG}.log" 2>&1
             
-        # Calcular tiempo transcurrido en milisegundos
-        END_TIME=$(date +%s%N)
-        ELAPSED_TIME=$(( (END_TIME - START_TIME) / 1000000 ))
-        
-        # Escribir el tiempo en el archivo de log
-        echo "Tiempo transcurrido: ${ELAPSED_TIME} milisegundos" >> "${LOG_DIR}/${LANG}.log"
+        # Calcular tiempo transcurrido
+        END_TIME=$(date +%s%N)  # Modificado a %s%N
+        ELAPSED_TIME=$(( (END_TIME - START_TIME) / 1000000 ))  # Dividido entre 1,000,000
         
         # Registrar en el resumen
         printf "%-12s\t%d\n" "${LANG}" "${ELAPSED_TIME}" >> ${SUMMARY_FILE}
