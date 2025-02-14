@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configurar variables
-REPO_URL="https://github.com/JP1604/dockerlanguages.git"  # Cambiar por tu URL real
+REPO_URL="https://github.com/JP1604/dockerlanguages.git"
 LOG_DIR="/app/logs"
 SUMMARY_FILE="${LOG_DIR}/summary.txt"
 
@@ -9,7 +9,7 @@ SUMMARY_FILE="${LOG_DIR}/summary.txt"
 mkdir -p ${LOG_DIR}
 
 # Inicializar archivo de resumen
-echo -e "Lenguaje\tTiempo (s)" > ${SUMMARY_FILE}
+echo -e "Lenguaje\tTiempo (ms)" > ${SUMMARY_FILE}
 echo "---------------------------------" >> ${SUMMARY_FILE}
 
 # Clonar el repositorio objetivo
@@ -27,8 +27,8 @@ for LANG_DIR in *; do
         # Construir la imagen
         docker build -t "runtime-${LANG}" -f "${LANG_DIR}/Dockerfile" "${LANG_DIR}"
         
-        # Medir tiempo de ejecución
-        START_TIME=$(date +%s)
+        # Medir tiempo de ejecución con precisión de nanosegundos
+        START_TIME=$(date +%s%N)
         
         # Ejecutar el contenedor y guardar logs
         docker run --rm \
@@ -36,9 +36,9 @@ for LANG_DIR in *; do
             "runtime-${LANG}" \
             > "${LOG_DIR}/${LANG}.log" 2>&1
             
-        # Calcular tiempo transcurrido
-        END_TIME=$(date +%s)
-        ELAPSED_TIME=$((END_TIME - START_TIME))
+        # Calcular tiempo transcurrido en milisegundos
+        END_TIME=$(date +%s%N)
+        ELAPSED_TIME=$(( (END_TIME - START_TIME) / 1000000 ))
         
         # Registrar en el resumen
         printf "%-12s\t%d\n" "${LANG}" "${ELAPSED_TIME}" >> ${SUMMARY_FILE}
