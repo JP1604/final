@@ -1,29 +1,47 @@
-📘 Instructivo para Ejecución
+# 📘 Instructivo para Ejecución
 
-🔧 Requisitos Previos
+## 🔧 Requisitos Previos
 
-Docker instalado.
+- Docker instalado.
+- Acceso a Docker Hub (opcional si se desea subir la imagen).
 
-Acceso a Docker Hub (opcional si se desea subir la imagen).
+## PASO A PASO PARA EJECUTAR EN PLAY WITH DOCKER
 
-#PASO A PASO PARA EJECTUR EN PLAY WITH DOCKER
-1. apk update && apk add git
-2. git clone https://github.com/JP1604/final.git
-3. mkdir logs
-4. cd final 
-5. docker build -t builder
-6. docker run -it --rm \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v $(pwd)/logs:/app/logs \
-  --privileged \
-    builder
+1. Actualiza los paquetes e instala Git:
+    ```sh
+    apk update && apk add git
+    ```
+2. Clona el repositorio:
+    ```sh
+    git clone https://github.com/JP1604/final.git
+    ```
+3. Crea el directorio de logs:
+    ```sh
+    mkdir logs
+    ```
+4. Navega al directorio del proyecto:
+    ```sh
+    cd final
+    ```
+5. Construye la imagen Docker:
+    ```sh
+    docker build -t builder .
+    ```
+6. Ejecuta el contenedor:
+    ```sh
+    docker run -it --rm \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      -v $(pwd)/logs:/app/logs \
+      --privileged \
+      builder
+    ```
 
-#MIEMBROS DEL GRUPO
-Juan Pablo Pérez
-Andres Felipe Pérez 
+## MIEMBROS DEL GRUPO
 
-#ENLACE DE LOS REPOSITORIOS 
-repositorio base: https://github.com/JP1604/final.git
-repositorio lenguajes: https://github.com/JP1604/dockerlanguages.git
+- Juan Pablo Pérez
+- Andres Felipe Pérez
 
+## ENLACE DE LOS REPOSITORIOS
 
+- Repositorio base: [https://github.com/JP1604/final.git](https://github.com/JP1604/final.git)
+- Repositorio lenguajes: [https://github.com/JP1604/dockerlanguages.git](https://github.com/JP1604/dockerlanguages.git)
