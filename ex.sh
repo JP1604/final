@@ -3,9 +3,14 @@
 # Configurar variables
 REPO_URL="https://github.com/JP1604/dockerlanguages.git"  # Cambiar por tu URL real
 LOG_DIR="/app/logs"
+SUMMARY_FILE="${LOG_DIR}/summary.txt"
 
-# Crear directorio de logs (por si acaso)
+# Crear directorios necesarios
 mkdir -p ${LOG_DIR}
+
+# Inicializar archivo de resumen
+echo -e "Lenguaje\tTiempo (s)" > ${SUMMARY_FILE}
+echo "---------------------------------" >> ${SUMMARY_FILE}
 
 # Clonar el repositorio objetivo
 echo "Clonando repositorio..."
@@ -22,12 +27,26 @@ for LANG_DIR in *; do
         # Construir la imagen
         docker build -t "runtime-${LANG}" -f "${LANG_DIR}/Dockerfile" "${LANG_DIR}"
         
+        # Medir tiempo de ejecución
+        START_TIME=$(date +%s)
+        
         # Ejecutar el contenedor y guardar logs
         docker run --rm \
             -v "${LOG_DIR}:/codigo/logs" \
             "runtime-${LANG}" \
             > "${LOG_DIR}/${LANG}.log" 2>&1
+            
+        # Calcular tiempo transcurrido
+        END_TIME=$(date +%s)
+        ELAPSED_TIME=$((END_TIME - START_TIME))
+        
+        # Registrar en el resumen
+        printf "%-12s\t%d\n" "${LANG}" "${ELAPSED_TIME}" >> ${SUMMARY_FILE}
     fi
 done
 
-echo "Proceso completado. Los logs están en: ${LOG_DIR}"
+# Mostrar resumen en consola
+echo -e "\nResumen de ejecución:"
+cat ${SUMMARY_FILE}
+
+echo -e "\nProceso completado. Los logs están en: ${LOG_DIR}"
