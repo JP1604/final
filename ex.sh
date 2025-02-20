@@ -9,7 +9,7 @@ SUMMARY_FILE="${LOG_DIR}/summary.txt"
 mkdir -p ${LOG_DIR}
 
 # Inicializar archivo de resumen
-echo -e "Lenguaje\tTiempo (s)" > ${SUMMARY_FILE}
+echo -e "Lenguaje\tTiempo (ms)" > ${SUMMARY_FILE}
 echo "---------------------------------" >> ${SUMMARY_FILE}
 
 # Clonar el repositorio objetivo
