@@ -39,7 +39,7 @@ for LANG_DIR in *; do
             
         # Calcular tiempo transcurrido
         END_TIME=$(date +%s.%N)
-        ELAPSED_TIME_MS=$(bc <<< "(${END_TIME} - ${START_TIME}) * 1000")
+        ELAPSED_TIME_MS=$(echo "(${END_TIME} - ${START_TIME}) * 1000" | bc -l)
         
         # Escribir el tiempo en el archivo de log
         echo "Tiempo transcurrido: ${ELAPSED_TIME_MS} milisegundos" >> "${LOG_DIR}/${LANG}.log"
