@@ -28,7 +28,8 @@ for LANG_DIR in *; do
         docker build -t "runtime-${LANG}" -f "${LANG_DIR}/Dockerfile" "${LANG_DIR}"
         
         # Medir tiempo de ejecución
-        START_TIME=$(date +%s)
+ # Medir tiempo de ejecución
+        START_TIME=$(date +%s.%N)
         
         # Ejecutar el contenedor y guardar logs
         docker run --rm \
@@ -37,17 +38,14 @@ for LANG_DIR in *; do
             > "${LOG_DIR}/${LANG}.log" 2>&1
             
         # Calcular tiempo transcurrido
-               END_TIME=$(date +%s)
-        ELAPSED_TIME=$((END_TIME - START_TIME))
-        
-        # Convertir a milisegundos (dividir los segundos entre 1000)
-        ELAPSED_TIME_MS=$(bc <<< "scale=3; ${ELAPSED_TIME}/1000")
+        END_TIME=$(date +%s.%N)
+        ELAPSED_TIME_MS=$(bc <<< "(${END_TIME} - ${START_TIME}) * 1000")
         
         # Escribir el tiempo en el archivo de log
         echo "Tiempo transcurrido: ${ELAPSED_TIME_MS} milisegundos" >> "${LOG_DIR}/${LANG}.log"
         
         # Registrar en el resumen
-        printf "%-12s\t%d\n" "${LANG}" "${ELAPSED_TIME}" >> ${SUMMARY_FILE}
+        printf "%-12s\t%s\n" "${LANG}" "${ELAPSED_TIME_MS}" >> ${SUMMARY_FILE}
     fi
 done
 
